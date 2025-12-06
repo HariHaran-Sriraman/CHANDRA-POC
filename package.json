@@ -17,6 +17,8 @@
     "ag-grid-community": "^33.2.1",
     "ag-grid-enterprise": "^33.2.1",
     "ag-grid-react": "^33.2.1",
+    "axios": "^1.13.2",
+    "formik": "^2.4.9",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-resizable": "^3.0.5",
