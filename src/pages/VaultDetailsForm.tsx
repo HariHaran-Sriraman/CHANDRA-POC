@@ -3,54 +3,27 @@ import { useFormik } from "formik";
 import {
   Box,
   Button,
-  Grid,
   MenuItem,
   TextField,
   Typography,
   Paper,
+  Grid,
 } from "@mui/material";
 import axios from "axios";
-
-// Define form value types
-interface VaultFormValues {
-  environment: string;
-  vaultAddress: string;
-  roleId: string;
-  idType: string;
-  vaultIdPath: string;
-  vaultIdRenewalInterview: string;
-  passwordRotationThreshold: string;
-  passwordRotationEnabled: string;
-  passwordRotationAccount: string;
-  ait: string;
-  appName: string;
-  templateSourcePath: string;
-  templateDestinationPath: string;
-}
+import { useVaultStore } from "../store/VaultStore";
 
 const VaultDetailsForm: React.FC = () => {
-  const formik = useFormik<VaultFormValues>({
-    initialValues: {
-      environment: "",
-      vaultAddress: "",
-      roleId: "",
-      idType: "",
-      vaultIdPath: "",
-      vaultIdRenewalInterview: "",
-      passwordRotationThreshold: "",
-      passwordRotationEnabled: "",
-      passwordRotationAccount: "",
-      ait: "",
-      appName: "",
-      templateSourcePath: "",
-      templateDestinationPath: "",
-    },
-    onSubmit: async (values, { resetForm }) => {
+  const { formValues, setFormValues } = useVaultStore();
+
+  const formik = useFormik({
+    initialValues: formValues, // ✅ Zustand values populate here
+    enableReinitialize: true,  // ensures Formik updates if Zustand changes
+    onSubmit: async (values) => {
       try {
-        const response = await axios.post("/api/vault", values);
-        console.log("API Response:", response.data);
+        await axios.post("/api/vault", values);
         alert("Form submitted successfully!");
-        resetForm();
+        // Optionally sync back to Zustand
+        setFormValues(values);
       } catch (error) {
         console.error("Error submitting form:", error);
         alert("Failed to submit form.");
@@ -59,14 +32,14 @@ const VaultDetailsForm: React.FC = () => {
   });
 
   return (
-    <Paper elevation={3} sx={{ p: 4, maxWidth: 1000, margin: "auto" }}>
+    <Paper elevation={3} sx={{ p: 4, maxWidth: 900, margin: "auto" }}>
       <Typography variant="h5" gutterBottom align="center">
         Vault Details
       </Typography>
 
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
-          {/* Environment Dropdown */}
+          {/* Environment */}
           <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
               select
@@ -76,7 +49,6 @@ const VaultDetailsForm: React.FC = () => {
               label="Environment"
               value={formik.values.environment}
               onChange={formik.handleChange}
-              margin="normal"
             >
               <MenuItem value="Development">Development</MenuItem>
               <MenuItem value="Staging">Staging</MenuItem>
@@ -84,7 +56,7 @@ const VaultDetailsForm: React.FC = () => {
             </TextField>
           </Grid>
 
-          {/* Vault Address Dropdown */}
+          {/* Vault Address */}
           <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
               select
@@ -94,7 +66,6 @@ const VaultDetailsForm: React.FC = () => {
               label="Vault Address"
               value={formik.values.vaultAddress}
               onChange={formik.handleChange}
-              margin="normal"
             >
               <MenuItem value="Address1">Address1</MenuItem>
               <MenuItem value="Address2">Address2</MenuItem>
@@ -111,11 +82,10 @@ const VaultDetailsForm: React.FC = () => {
               label="Role Id"
               value={formik.values.roleId}
               onChange={formik.handleChange}
-              margin="normal"
             />
           </Grid>
 
-          {/* Id Type Dropdown */}
+          {/* Id Type */}
           <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
               select
@@ -125,7 +95,6 @@ const VaultDetailsForm: React.FC = () => {
               label="Id Type"
               value={formik.values.idType}
               onChange={formik.handleChange}
-              margin="normal"
             >
               <MenuItem value="User">User</MenuItem>
               <MenuItem value="Service">Service</MenuItem>
@@ -142,7 +111,6 @@ const VaultDetailsForm: React.FC = () => {
               label="Vault Id Path"
               value={formik.values.vaultIdPath}
               onChange={formik.handleChange}
-              margin="normal"
             />
           </Grid>
 
@@ -155,7 +123,6 @@ const VaultDetailsForm: React.FC = () => {
               label="Vault Id Renewal Interview"
               value={formik.values.vaultIdRenewalInterview}
               onChange={formik.handleChange}
-              margin="normal"
             />
           </Grid>
 
@@ -168,11 +135,10 @@ const VaultDetailsForm: React.FC = () => {
               label="Password Rotation Threshold"
               value={formik.values.passwordRotationThreshold}
               onChange={formik.handleChange}
-              margin="normal"
             />
           </Grid>
 
-          {/* Password Rotation Enabled Dropdown */}
+          {/* Password Rotation Enabled */}
           <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
               select
@@ -182,7 +148,6 @@ const VaultDetailsForm: React.FC = () => {
               label="Password Rotation Enabled"
               value={formik.values.passwordRotationEnabled}
               onChange={formik.handleChange}
-              margin="normal"
             >
               <MenuItem value="Yes">Yes</MenuItem>
               <MenuItem value="No">No</MenuItem>
@@ -198,7 +163,6 @@ const VaultDetailsForm: React.FC = () => {
               label="Password Rotation Account"
               value={formik.values.passwordRotationAccount}
               onChange={formik.handleChange}
-              margin="normal"
             />
           </Grid>
 
@@ -211,7 +175,6 @@ const VaultDetailsForm: React.FC = () => {
               label="AIT"
               value={formik.values.ait}
               onChange={formik.handleChange}
-              margin="normal"
             />
           </Grid>
 
@@ -224,7 +187,6 @@ const VaultDetailsForm: React.FC = () => {
               label="App Name"
               value={formik.values.appName}
               onChange={formik.handleChange}
-              margin="normal"
             />
           </Grid>
 
@@ -237,7 +199,6 @@ const VaultDetailsForm: React.FC = () => {
               label="Template Source Path"
               value={formik.values.templateSourcePath}
               onChange={formik.handleChange}
-              margin="normal"
             />
           </Grid>
 
@@ -250,19 +211,15 @@ const VaultDetailsForm: React.FC = () => {
               label="Template Destination Path"
               value={formik.values.templateDestinationPath}
               onChange={formik.handleChange}
-              margin="normal"
             />
           </Grid>
-
-          {/* Submit Button */}
-          <Grid item xs={12}>
-            <Box textAlign="center" mt={2}>
-              <Button type="submit" variant="contained" color="primary">
-                Submit
-              </Button>
-            </Box>
-          </Grid>
         </Grid>
+
+        <Box textAlign="center" mt={3}>
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </Box>
       </form>
     </Paper>
   );
