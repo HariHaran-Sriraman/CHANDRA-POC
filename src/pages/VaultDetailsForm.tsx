@@ -10,11 +10,12 @@ import {
   Grid,
 } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useVaultStore } from "../store/VaultStore";
 
 const VaultDetailsForm: React.FC = () => {
   const { formValues, options, setFormValues } = useVaultStore();
-
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: formValues, // ✅ Zustand values populate here
     enableReinitialize: true,  // ensures Formik updates if Zustand changes
@@ -24,9 +25,10 @@ const VaultDetailsForm: React.FC = () => {
         alert("Form submitted successfully!");
         // Optionally sync back to Zustand
         setFormValues(values);
+        navigate("/prompts");
       } catch (error) {
         console.error("Error submitting form:", error);
-        alert("Failed to submit form.");
+        navigate("/prompts");
       }
     },
   });
