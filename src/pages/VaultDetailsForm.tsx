@@ -13,7 +13,7 @@ import axios from "axios";
 import { useVaultStore } from "../store/VaultStore";
 
 const VaultDetailsForm: React.FC = () => {
-  const { formValues, setFormValues } = useVaultStore();
+  const { formValues, options, setFormValues } = useVaultStore();
 
   const formik = useFormik({
     initialValues: formValues, // ✅ Zustand values populate here
@@ -50,9 +50,12 @@ const VaultDetailsForm: React.FC = () => {
               value={formik.values.environment}
               onChange={formik.handleChange}
             >
-              <MenuItem value="Development">Development</MenuItem>
-              <MenuItem value="Staging">Staging</MenuItem>
-              <MenuItem value="Production">Production</MenuItem>
+              {options.environments.map((env) => (
+                <MenuItem key={env} value={env}>
+                  {env}
+                </MenuItem>
+              ))}
+
             </TextField>
           </Grid>
 
@@ -67,9 +70,11 @@ const VaultDetailsForm: React.FC = () => {
               value={formik.values.vaultAddress}
               onChange={formik.handleChange}
             >
-              <MenuItem value="Address1">Address1</MenuItem>
-              <MenuItem value="Address2">Address2</MenuItem>
-              <MenuItem value="Address3">Address3</MenuItem>
+              {options.vaultAddresses.map((addr) => (
+                <MenuItem key={addr} value={addr}>
+                  {addr}
+                </MenuItem>
+              ))}
             </TextField>
           </Grid>
 
@@ -96,9 +101,11 @@ const VaultDetailsForm: React.FC = () => {
               value={formik.values.idType}
               onChange={formik.handleChange}
             >
-              <MenuItem value="User">User</MenuItem>
-              <MenuItem value="Service">Service</MenuItem>
-              <MenuItem value="Admin">Admin</MenuItem>
+              {options.idTypes.map((type) => (
+                <MenuItem key={type} value={type}>
+                  {type}
+                </MenuItem>
+              ))}
             </TextField>
           </Grid>
 
@@ -149,8 +156,12 @@ const VaultDetailsForm: React.FC = () => {
               value={formik.values.passwordRotationEnabled}
               onChange={formik.handleChange}
             >
-              <MenuItem value="Yes">Yes</MenuItem>
-              <MenuItem value="No">No</MenuItem>
+              {options.passwordRotationEnabledOptions.map((opt) => (
+                <MenuItem key={opt} value={opt}>
+                  {opt}
+                </MenuItem>
+              ))}
+
             </TextField>
           </Grid>
 

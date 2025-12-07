@@ -17,8 +17,16 @@ interface VaultFormValues {
   templateDestinationPath: string;
 }
 
+interface VaultOptions {
+  environments: string[];
+  vaultAddresses: string[];
+  idTypes: string[];
+  passwordRotationEnabledOptions: string[];
+}
+
 interface VaultState {
   formValues: VaultFormValues;
+  options: VaultOptions;
   setFormValues: (values: Partial<VaultFormValues>) => void;
 }
 
@@ -37,6 +45,12 @@ export const useVaultStore = create<VaultState>((set) => ({
     appName: "MyApp",
     templateSourcePath: "/templates/source",
     templateDestinationPath: "/templates/destination",
+  },
+  options: {
+    environments: ["Development", "Staging", "Production"],
+    vaultAddresses: ["Address1", "Address2", "Address3"],
+    idTypes: ["User", "Service", "Admin"],
+    passwordRotationEnabledOptions: ["Yes", "No"],
   },
   setFormValues: (values) =>
     set((state) => ({
