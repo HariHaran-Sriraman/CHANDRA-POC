@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import {
   Box,
@@ -14,8 +14,14 @@ import { useNavigate } from "react-router-dom";
 import { useVaultStore } from "../store/VaultStore";
 
 const VaultDetailsForm: React.FC = () => {
-  const { formValues, options, setFormValues } = useVaultStore();
+  const { formValues, options, fetchInitialData, setFormValues } = useVaultStore();
+
   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     fetchInitialData(); // ✅ fetch only when this component mounts
+//   }, [fetchInitialData]);
+
   const formik = useFormik({
     initialValues: formValues, // ✅ Zustand values populate here
     enableReinitialize: true,  // ensures Formik updates if Zustand changes
@@ -34,7 +40,7 @@ const VaultDetailsForm: React.FC = () => {
   });
 
   return (
-    <Paper elevation={3} sx={{ p: 4, maxWidth: 900, margin: "auto" }}>
+    <Paper elevation={3} sx={{ p: 4, maxWidth: 900, m: "30px auto" }}>
       <Typography variant="h5" gutterBottom align="center">
         Vault Details
       </Typography>

@@ -1,12 +1,21 @@
 // PromptPage.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Paper, Typography, Box, Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 
+import { usePromptStore } from "../store/PromptStore";
+
+
 
 const PromptPage: React.FC = () => {
-  const [prompt1, setPrompt1] = useState("Enter your first sample prompt here...");
-  const [prompt2, setPrompt2] = useState("Enter your second sample prompt here...");
+  const { prompt1, prompt2, setPrompts, fetchInitialPrompts } = usePromptStore();
+
+  useEffect(() => {
+    fetchInitialPrompts(); // ✅ fetch from API when page loads
+  }, [fetchInitialPrompts]);
+
+//   const [prompt1, setPrompt1] = useState("Enter your first sample prompt here...");
+//   const [prompt2, setPrompt2] = useState("Enter your second sample prompt here...");
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -18,7 +27,7 @@ const PromptPage: React.FC = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 4, maxWidth: 800, margin: "auto" }}>
+    <Paper elevation={3} sx={{ p: 4, maxWidth: 900, m: "30px auto" }}>
       <Typography variant="h5" gutterBottom align="center">
         Sample Prompts
       </Typography>
@@ -33,7 +42,7 @@ const PromptPage: React.FC = () => {
               rows={5}
               label="Prompt 1"
               value={prompt1}
-              onChange={(e) => setPrompt1(e.target.value)}
+              onChange={(e) => setPrompts({ prompt1: e.target.value })}
             />
           </Grid>
           <Grid size={{ xs: 3, sm: 3 }}>
@@ -58,7 +67,7 @@ const PromptPage: React.FC = () => {
               rows={5}
               label="Prompt 2"
               value={prompt2}
-              onChange={(e) => setPrompt2(e.target.value)}
+              onChange={(e) => setPrompts({ prompt2: e.target.value })}
             />
           </Grid>
           <Grid size={{ xs: 3, sm: 3 }}>

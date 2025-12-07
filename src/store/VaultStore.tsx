@@ -1,5 +1,6 @@
 // store/vaultStore.ts
 import { create } from "zustand";
+import axios from "axios";
 
 interface VaultFormValues {
   environment: string;
@@ -28,6 +29,7 @@ interface VaultState {
   formValues: VaultFormValues;
   options: VaultOptions;
   setFormValues: (values: Partial<VaultFormValues>) => void;
+  fetchInitialData: () => Promise<void>;
 }
 
 export const useVaultStore = create<VaultState>((set) => ({
@@ -56,4 +58,25 @@ export const useVaultStore = create<VaultState>((set) => ({
     set((state) => ({
       formValues: { ...state.formValues, ...values },
     })),
+    fetchInitialData: async () => {
+    try {
+      // 🔧 Replace with your real API endpoint later
+      const response = await axios.get("/api/vault/init");
+
+      // Assume API returns { formValues: {...}, options: {...} }
+      const { formValues, options } = response.data;
+
+      set({
+        formValues: formValues || {},
+        options: options || {
+          environments: [],
+          vaultAddresses: [],
+          idTypes: [],
+          passwordRotationEnabledOptions: [],
+        },
+      });
+    } catch (error) {
+      console.error("Failed to fetch initial data:", error);
+    }
+  }
 }));
